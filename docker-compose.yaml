@@ -1,0 +1,13 @@
+version: "3.5"
+services:
+  #Deploy a Consumer.
+  consumer:
+    build: .
+    container_name: account-consumer
+    ports:
+      - 8103:8080
+    image: oawofolu/ssm-accountservice:v1
+    depends_on:
+      - zookeeper
+      - kafka
+      - postgres
