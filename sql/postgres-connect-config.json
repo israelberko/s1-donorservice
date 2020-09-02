@@ -1,0 +1,19 @@
+{
+   "name":"donation-outbox-connector",
+   "config":{
+      "connector.class":"io.debezium.connector.postgresql.PostgresConnector",
+      "tasks.max":"1",
+      "database.hostname":"postgres",
+      "database.port":"5432",
+      "database.user":"postgres",
+      "database.password":"postgres",
+      "database.password": "postgres", 
+      "database.dbname" : "postgres", 
+      "database.server.name": "dbserver1", 
+      "database.whitelist":"postgres",
+      "table.whitelist":"donor.donor,pledge.donor_outbox",
+      "database.history.kafka.bootstrap.servers":"kafka:9092",
+      "database.history.kafka.topic":"dbhistory.donor",
+      "tombstones.on.delete" : "false"
+   }
+}
