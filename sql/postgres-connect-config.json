@@ -11,7 +11,7 @@
       "database.dbname" : "postgres", 
       "database.server.name": "dbserver1", 
       "database.whitelist":"postgres",
-      "table.whitelist":"donor.donor,pledge.donor_outbox",
+      "table.whitelist":"donor.donor,donor.donor_outbox",
       "database.history.kafka.bootstrap.servers":"kafka:9092",
       "database.history.kafka.topic":"dbhistory.donor",
       "tombstones.on.delete" : "false"

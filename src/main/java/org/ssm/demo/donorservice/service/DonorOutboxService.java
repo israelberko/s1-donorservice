@@ -1,13 +1,16 @@
 package org.ssm.demo.donorservice.service;
 
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Random;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
@@ -26,16 +29,22 @@ public class DonorOutboxService {
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	@Autowired DonorRepository donorRepository;
 	
-	@Transactional
-	@Bean
-	public Consumer<Map<?,?>> createDonorOutbox() {
-		return message -> {
-			Donor donor = Donor.of(message);
-			DonorOutbox donorOutbox = DonorOutbox.from(donor);
-			applicationEventPublisher.publishEvent(new SendOutboxEvent(donorOutbox));
-		};
-	}
+	private static final String REQUEST_PLEDGE = "REQUEST_PLEDGE";
 	
+	@Transactional
+	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "donor-consumer")
+	public void pledgeRequested(Map<?,?> message) {
+		DonorOutbox outbox = DonorOutbox.of(message);
+		if (REQUEST_PLEDGE.equals(outbox.getEvent_type())) {
+			UUID pledgeId = outbox.getEvent_id();
+			LOG.info("Received {} msg for Pledge ID {}", outbox.getEvent_type(), pledgeId);
+			Donor donor = getRandomDonor(pledgeId);
+			donor.setAmount(getRandomAmount());
+			donor.setPledge_id(outbox.getEvent_id());
+			donorRepository.save(donor);
+		}
+			
+	}
 
 	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
 	public void acceptOutboxEvent(SendOutboxEvent event){
@@ -44,13 +53,14 @@ public class DonorOutboxService {
 		donorOutboxRepository.delete(event.getOutbox());
 	}
 	
-	@Transactional
-	@Bean
-	public Consumer<Map<?,?>> donationRequested() {
-		return message -> {
-			DonorOutbox donationRequested = DonorOutbox.of(message);
-			LOG.info("DonorOutbox: {}", donationRequested);
-		
-		};
+	public Donor getRandomDonor(UUID pledge_id) {
+		Integer randomDonor = new Random().nextInt(199);
+		Page<Donor> donor = donorRepository.findAll(PageRequest.of(randomDonor, 1));
+		return donor.isEmpty() ? new Donor() : donor.toList().get(0);
+	}
+	
+	public Integer getRandomAmount() {
+		Integer randomAmount = new Random().nextInt(10);
+		return randomAmount;
 	}
 }
