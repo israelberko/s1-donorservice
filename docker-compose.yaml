@@ -56,3 +56,7 @@ services:
     ports:
       - 8104:8080
     image: oawofolu/ssm-donorservice:v1
+networks:
+  default:
+    external:
+      name: s1-pledgeservice_default
