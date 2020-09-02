@@ -1,3 +1,4 @@
+version: "3.5"
 services:
   #Deploy a Consumer.
   consumer:
@@ -6,6 +7,6 @@ services:
     ports:
       - 8104:8080
     image: oawofolu/ssm-donorservice:v1
-#networks:
-#  default:
-#    name: s1-pledgeservice_default
+networks:
+  default:
+    name: s1-pledgeservice_default
