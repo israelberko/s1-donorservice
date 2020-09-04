@@ -1,5 +1,6 @@
-DROP SCHEMA donor;
-CREATE SCHEMA IF NOT EXISTS donor;
+DROP SCHEMA IF EXISTS donor;
+CREATE SCHEMA IF donor;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA donor;
 GRANT CREATE,USAGE ON SCHEMA donor TO postgres; 
 alter USER postgres set search_path to pledge, donor, postgres;
 
