@@ -14,6 +14,16 @@ CREATE TABLE donor.donor (
 	CONSTRAINT invitees_pkey PRIMARY KEY (id)
 );
 
+CREATE TABLE donor.donor_outbox (
+  id serial,
+  event_id uuid,
+  event_type varchar(100) ,
+  payload varchar(5000) ,
+  created_at timestamp default current_timestamp,
+  CONSTRAINT donor_outbox_pkey PRIMARY KEY (id)
+)
+;
+
 INSERT INTO donor.donor (first_name,last_name,email) VALUES 
 ('Connie','Martin','c.martin@randatmail.com')
 ,('Daryl','Hamilton','d.hamilton@randatmail.com')
