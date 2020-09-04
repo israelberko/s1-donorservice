@@ -9,4 +9,5 @@ services:
     image: oawofolu/ssm-donorservice:v1
 networks:
   default:
-    name: s1-pledgeservice_default
+    external:
+      name: s1-pledgeservice_default
