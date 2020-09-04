@@ -14,6 +14,8 @@
       "table.whitelist":"donor.donor,donor.donor_outbox",
       "database.history.kafka.bootstrap.servers":"kafka:9092",
       "database.history.kafka.topic":"dbhistory.donor",
-      "tombstones.on.delete" : "false"
+      "tombstones.on.delete" : "false",
+      "slot.name" : "donor-slot"
+   }
    }
 }
