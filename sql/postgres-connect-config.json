@@ -15,7 +15,11 @@
       "database.history.kafka.bootstrap.servers":"kafka:9092",
       "database.history.kafka.topic":"dbhistory.donor",
       "tombstones.on.delete" : "false",
-      "slot.name" : "donor_slot"
-   }
+      "slot.name" : "donor_slot",
+      "transforms" : "outbox",
+      "transforms.outbox.type" : "io.debezium.transforms.Filter",
+      "transforms.outbox.language" : "jsr223.groovy",
+      "transforms.outbox.condition" : "value.op != 'd'",
+      "transforms.outbox.null.handling.mode" : "drop"
    }
 }
