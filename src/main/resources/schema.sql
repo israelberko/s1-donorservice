@@ -1,5 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE SCHEMA donor IF NOT EXISTS;
+CREATE SCHEMA IF NOT EXISTS donor;
 GRANT CREATE,USAGE ON SCHEMA donor TO postgres; 
 alter USER postgres set search_path to donor, postgres;
 
