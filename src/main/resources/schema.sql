@@ -1,4 +1,4 @@
-DELETE SCHEMA donor;
+DROP SCHEMA donor;
 CREATE SCHEMA IF NOT EXISTS donor;
 GRANT CREATE,USAGE ON SCHEMA donor TO postgres; 
 alter USER postgres set search_path to pledge, donor, postgres;
