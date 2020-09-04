@@ -36,30 +36,35 @@ public class DonorOutboxService {
 	public void pledgeRequested(Map<?,?> message) {
 		DonorOutbox outbox = DonorOutbox.of(message);
 		if (REQUEST_PLEDGE.equals(outbox.getEvent_type())) {
-			UUID pledgeId = outbox.getEvent_id();
-			LOG.info("Received {} msg for Pledge ID {}", outbox.getEvent_type(), pledgeId);
-			Donor donor = getRandomDonor(pledgeId);
-			donor.setAmount(getRandomAmount());
-			donor.setPledge_id(outbox.getEvent_id());
-			donorRepository.save(donor);
+			applicationEventPublisher.publishEvent(new SendOutboxEvent(outbox));
+			saveRandomDonor(outbox);
 		}
 			
 	}
 
 	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
 	public void acceptOutboxEvent(SendOutboxEvent event){
-		LOG.info("Outbox: {}", event.getOutbox());
+		LOG.info("Donor Outbox: {}", event.getOutbox());
 		donorOutboxRepository.save(event.getOutbox());
 		donorOutboxRepository.delete(event.getOutbox());
 	}
 	
-	public Donor getRandomDonor(UUID pledge_id) {
+	public void saveRandomDonor(DonorOutbox outbox) {
+		UUID pledgeId = outbox.getEvent_id();
+		LOG.info("Received {} msg for Pledge ID {}", outbox.getEvent_type(), pledgeId);
+		Donor donor = getRandomDonor(pledgeId);
+		donor.setAmount(getRandomAmount());
+		donor.setPledge_id(pledgeId);
+		donorRepository.save(donor);
+	}
+	
+	private Donor getRandomDonor(UUID pledge_id) {
 		Integer randomDonor = new Random().nextInt(199);
 		Page<Donor> donor = donorRepository.findAll(PageRequest.of(randomDonor, 1));
 		return donor.isEmpty() ? new Donor() : donor.toList().get(0);
 	}
 	
-	public Integer getRandomAmount() {
+	private Integer getRandomAmount() {
 		Integer randomAmount = new Random().nextInt(10);
 		return randomAmount;
 	}
