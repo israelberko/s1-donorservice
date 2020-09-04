@@ -35,6 +35,7 @@ public class DonorOutboxService {
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "donor-consumer")
 	public void pledgeRequested(Map<?,?> message) {
 		DonorOutbox outbox = DonorOutbox.of(message);
+		LOG.info("This part shouldn't be null: {}", message);
 		if (REQUEST_PLEDGE.equals(outbox.getEvent_type())) {
 			applicationEventPublisher.publishEvent(new SendOutboxEvent(outbox));
 			saveRandomDonor(outbox);
