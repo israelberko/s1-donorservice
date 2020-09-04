@@ -1,12 +1,11 @@
 DROP SCHEMA IF EXISTS donor;
 CREATE SCHEMA donor;
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA donor;
 GRANT CREATE,USAGE ON SCHEMA donor TO postgres; 
 alter USER postgres set search_path to pledge, donor, postgres;
 
 CREATE TABLE donor.donor (
 	id serial NOT NULL,
-	pledge_id uuid DEFAULT uuid_generate_v4 (),
+	pledge_id uuid DEFAULT public.uuid_generate_v4 (),
 	first_name varchar(1024) NULL,
 	last_name varchar(1024) NULL,
 	email varchar(1024) NULL,
