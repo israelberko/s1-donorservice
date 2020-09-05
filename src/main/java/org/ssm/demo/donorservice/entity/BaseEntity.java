@@ -15,8 +15,12 @@ public interface BaseEntity {
 	final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 	
 	default <T> T buildFrom(Map<?,?> changeEvent, Class<T> valueType) {
-		Object afterField = ((Map<?,?>)changeEvent.get(PAYLOAD)).get(AFTER);
-		return OBJECT_MAPPER.convertValue(afterField, valueType);
+		if ( changeEvent.containsKey( PAYLOAD )) {
+			Object afterField = ((Map<?,?>)changeEvent.get(PAYLOAD)).get(AFTER);
+			return OBJECT_MAPPER.convertValue(afterField, valueType);
+		} else {
+			return OBJECT_MAPPER.convertValue(changeEvent, valueType);
+		}
 	}
 	
 	default Map<?,?> toMap() {

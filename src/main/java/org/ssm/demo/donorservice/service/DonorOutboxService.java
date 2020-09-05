@@ -21,8 +21,6 @@ import org.ssm.demo.donorservice.entity.DonorOutbox;
 import org.ssm.demo.donorservice.repository.DonorOutboxRepository;
 import org.ssm.demo.donorservice.repository.DonorRepository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Service
 public class DonorOutboxService {
 	
@@ -31,20 +29,16 @@ public class DonorOutboxService {
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	@Autowired DonorRepository donorRepository;
 	
-	private static final String PLEDGE_REQUESTED = "PLEDGE_REQUESTED";
-	
 	@Transactional
 	@KafkaListener(topics = "donor.inbox", groupId = "donor-consumer")
-	public void pledgeRequested(Map<?,?> message) {
-//		DonorOutbox outbox = DonorOutbox.of(message);
-		LOG.info("In donor service - {}: {}", message.getClass(), message);
-		ObjectMapper mapper = new ObjectMapper();
-		DonorOutbox outbox = mapper.convertValue(message, DonorOutbox.class);
-		LOG.info("Outbox: {}", outbox);
-//		if (PLEDGE_REQUESTED.equals(outbox.getEvent_type())) {
-//			applicationEventPublisher.publishEvent(new SendOutboxEvent(outbox));
-//			saveRandomDonor(outbox);
-//		}
+	public void pledgeRequested(Map<?,?> record) {
+		DonorOutbox message = DonorOutbox.of(record);
+		LOG.info("In donor service - {}", message);
+		
+		Donor donorToSave = getRandomDonor(message.getEvent_id());
+		DonorOutbox outbox = DonorOutbox.from(donorToSave);
+		applicationEventPublisher.publishEvent(new SendOutboxEvent(outbox));
+		donorRepository.save(donorToSave);
 			
 	}
 
@@ -55,19 +49,13 @@ public class DonorOutboxService {
 		donorOutboxRepository.delete(event.getOutbox());
 	}
 	
-	public void saveRandomDonor(DonorOutbox outbox) {
-		UUID pledgeId = outbox.getEvent_id();
-		LOG.info("Received {} msg for Pledge ID {}", outbox.getEvent_type(), pledgeId);
-		Donor donor = getRandomDonor(pledgeId);
-		donor.setAmount(getRandomAmount());
-		donor.setPledge_id(pledgeId);
-		donorRepository.save(donor);
-	}
-	
 	private Donor getRandomDonor(UUID pledge_id) {
-		Integer randomDonor = new Random().nextInt(199);
-		Page<Donor> donor = donorRepository.findAll(PageRequest.of(randomDonor, 1));
-		return donor.isEmpty() ? new Donor() : donor.toList().get(0);
+		Integer randomDonorIndex = new Random().nextInt(199);
+		Page<Donor> donorSet = donorRepository.findAll(PageRequest.of(randomDonorIndex, 1));
+		Donor randomDonor = donorSet.isEmpty() ? new Donor() : donorSet.toList().get(0);
+		randomDonor.setAmount(getRandomAmount());
+		randomDonor.setPledge_id(pledge_id);
+		return randomDonor;
 	}
 	
 	private Integer getRandomAmount() {
