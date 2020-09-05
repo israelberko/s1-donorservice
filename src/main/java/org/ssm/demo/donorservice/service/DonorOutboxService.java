@@ -33,12 +33,12 @@ public class DonorOutboxService {
 	
 	@Transactional
 	@KafkaListener(topics = "donor.inbox", groupId = "donor-consumer")
-	public void pledgeRequested(Map<?,?> message) {
-		DonorOutbox outbox = DonorOutbox.of(message);
-		LOG.info("In donor service: {}", outbox);
+	public void pledgeRequested(String message) {
+//		DonorOutbox outbox = DonorOutbox.of(message);
+		LOG.info("In donor service: {}", message);
 //		if (PLEDGE_REQUESTED.equals(outbox.getEvent_type())) {
-			applicationEventPublisher.publishEvent(new SendOutboxEvent(outbox));
-			saveRandomDonor(outbox);
+//			applicationEventPublisher.publishEvent(new SendOutboxEvent(outbox));
+//			saveRandomDonor(outbox);
 //		}
 			
 	}
