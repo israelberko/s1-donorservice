@@ -32,7 +32,7 @@ public class DonorOutboxService {
 	private static final String PLEDGE_REQUESTED = "PLEDGE_REQUESTED";
 	
 	@Transactional
-	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "donor-consumer")
+	@KafkaListener(topics = "dbserver1.donor.donor_outbox", groupId = "donor-consumer")
 	public void pledgeRequested(Map<?,?> message) {
 		DonorOutbox outbox = DonorOutbox.of(message);
 		if (PLEDGE_REQUESTED.equals(outbox.getEvent_type())) {
