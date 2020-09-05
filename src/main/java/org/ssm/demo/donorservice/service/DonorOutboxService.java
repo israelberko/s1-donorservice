@@ -21,6 +21,8 @@ import org.ssm.demo.donorservice.entity.DonorOutbox;
 import org.ssm.demo.donorservice.repository.DonorOutboxRepository;
 import org.ssm.demo.donorservice.repository.DonorRepository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Service
 public class DonorOutboxService {
 	
@@ -36,6 +38,9 @@ public class DonorOutboxService {
 	public void pledgeRequested(Map<?,?> message) {
 //		DonorOutbox outbox = DonorOutbox.of(message);
 		LOG.info("In donor service - {}: {}", message.getClass(), message);
+		ObjectMapper mapper = new ObjectMapper();
+		DonorOutbox outbox = mapper.convertValue(message, DonorOutbox.class);
+		LOG.info("Outbox: {}", outbox);
 //		if (PLEDGE_REQUESTED.equals(outbox.getEvent_type())) {
 //			applicationEventPublisher.publishEvent(new SendOutboxEvent(outbox));
 //			saveRandomDonor(outbox);
