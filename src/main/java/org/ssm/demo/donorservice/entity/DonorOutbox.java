@@ -31,7 +31,7 @@ public class DonorOutbox implements BaseEntity{
 	public static DonorOutbox from(Donor donor) {
 		DonorOutbox outbox = new DonorOutbox();
 		outbox.setEvent_id(donor.getPledge_id());
-		outbox.setEvent_type("PLEDGE_MATCHED");
+		outbox.setEvent_type("PLEDGE_REQUESTED_ACK");
 		outbox.setPayload(donor.toMap().toString());
 		return outbox;
 	}
