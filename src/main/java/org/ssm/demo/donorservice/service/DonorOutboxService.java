@@ -29,13 +29,13 @@ public class DonorOutboxService {
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	@Autowired DonorRepository donorRepository;
 	
-	private static final String REQUEST_PLEDGE = "PLEDGE_REQUESTED";
+	private static final String PLEDGE_REQUESTED = "PLEDGE_REQUESTED";
 	
 	@Transactional
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "donor-consumer")
 	public void pledgeRequested(Map<?,?> message) {
 		DonorOutbox outbox = DonorOutbox.of(message);
-		if (REQUEST_PLEDGE.equals(outbox.getEvent_type())) {
+		if (PLEDGE_REQUESTED.equals(outbox.getEvent_type())) {
 			applicationEventPublisher.publishEvent(new SendOutboxEvent(outbox));
 			saveRandomDonor(outbox);
 		}
