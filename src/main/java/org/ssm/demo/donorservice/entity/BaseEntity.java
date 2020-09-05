@@ -16,6 +16,7 @@ public interface BaseEntity {
 	
 	default <T> T buildFrom(Map<?,?> changeEvent, Class<T> valueType) {
 		if ( changeEvent.containsKey( PAYLOAD )) {
+			System.out.println(changeEvent);
 			Object afterField = ((Map<?,?>)changeEvent.get(PAYLOAD)).get(AFTER);
 			return OBJECT_MAPPER.convertValue(afterField, valueType);
 		} else {
