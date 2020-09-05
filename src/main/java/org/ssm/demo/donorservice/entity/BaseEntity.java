@@ -15,13 +15,11 @@ public interface BaseEntity {
 	final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 	
 	default <T> T buildFrom(Map<?,?> changeEvent, Class<T> valueType) {
-		if ( changeEvent.containsKey( PAYLOAD )) {
-			System.out.println(changeEvent);
-			Object afterField = ((Map<?,?>)changeEvent.get(PAYLOAD)).get(AFTER);
-			return OBJECT_MAPPER.convertValue(afterField, valueType);
-		} else {
-			return OBJECT_MAPPER.convertValue(changeEvent, valueType);
-		}
+		Object payload = ((Map<?,?>)changeEvent).get(PAYLOAD);
+		Object afterField = ((Map<?,?>)payload).get(AFTER);
+		return (afterField == null ?
+				OBJECT_MAPPER.convertValue(payload, valueType):
+			    OBJECT_MAPPER.convertValue(afterField, valueType));
 	}
 	
 	default Map<?,?> toMap() {
