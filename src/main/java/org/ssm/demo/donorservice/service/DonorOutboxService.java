@@ -31,8 +31,7 @@ public class DonorOutboxService {
 	
 	@Transactional
 	@KafkaListener(topics = "donor.inbox", groupId = "donor-consumer")
-	public void pledgeRequested(Map<?,?> record) {
-		DonorOutbox message = DonorOutbox.of(record);
+	public void pledgeRequested(DonorOutbox message) {
 		LOG.info("In donor service - {}", message);
 		
 		Donor donorToSave = getRandomDonor(message.getEvent_id());
