@@ -20,7 +20,7 @@ CREATE TABLE donor.donor (
 	email varchar(1024) NULL,
 	amount int default 0,
 	created_at timestamp default current_timestamp,
-	CONSTRAINT invitees_pkey PRIMARY KEY (id)
+	CONSTRAINT donor_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE donor.donor_outbox (
