@@ -1,4 +1,4 @@
-package org.ssm.demo.donorservice.entity;
+package org.ssm.demo.donorservice.shared;
 
 import java.util.Map;
 
@@ -16,13 +16,17 @@ public interface BaseEntity {
 	
 	default <T> T buildFrom(Map<?,?> changeEvent, Class<T> valueType) {
 		Object payload = ((Map<?,?>)changeEvent).get(PAYLOAD);
+		
 		Object afterField = ((Map<?,?>)payload).get(AFTER);
+		
 		return (afterField == null ?
 				OBJECT_MAPPER.convertValue(payload, valueType):
 			    OBJECT_MAPPER.convertValue(afterField, valueType));
 	}
 	
 	default Map<?,?> toMap() {
+		
 		return OBJECT_MAPPER.convertValue(this, new TypeReference<Map<?, ?>>() {});
+		
 	}
 }

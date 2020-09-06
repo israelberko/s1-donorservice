@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.ssm.demo.donorservice.shared.BaseEntity;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -30,9 +32,13 @@ public class DonorOutbox implements BaseEntity{
 	
 	public static DonorOutbox from(Donor donor) {
 		DonorOutbox outbox = new DonorOutbox();
+		
 		outbox.setEvent_id(donor.getPledge_id());
+		
 		outbox.setEvent_type("PLEDGE_REQUESTED_ACK");
+		
 		outbox.setPayload(donor.toMap().toString());
+		
 		return outbox;
 	}
 }

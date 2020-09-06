@@ -1,7 +1,5 @@
 package org.ssm.demo.donorservice.repository;
 
-import java.util.UUID;
-
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.ssm.demo.donorservice.entity.Donor;

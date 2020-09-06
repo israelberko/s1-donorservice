@@ -22,16 +22,21 @@ public class DonorService {
 	@Transactional
 	public Donor getRandomDonor(UUID pledge_id) {
 		Integer index = new Random().nextInt(30);
+		
 		Integer amount = new Random().nextInt(10);
+		
 		Page<Person> personSet = personRepository.findAll(PageRequest.of(index, 1));
+		
 		Person person = personSet.isEmpty() ? new Person() : personSet.toList().get(0);
+		
 		Donor donor = Donor.builder()
-				.amount(amount)
-				.pledge_id(pledge_id)
-				.first_name(person.getFirst_name())
-				.last_name(person.getLast_name())
-				.email(person.getEmail())
-				.build();
+						.amount(amount)
+						.pledge_id(pledge_id)
+						.first_name(person.getFirst_name())
+						.last_name(person.getLast_name())
+						.email(person.getEmail())
+					.build();
+		
 		return donor;
 	}
 	

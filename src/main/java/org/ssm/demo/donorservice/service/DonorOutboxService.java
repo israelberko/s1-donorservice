@@ -25,8 +25,11 @@ public class DonorOutboxService {
 	@KafkaListener(topics = "donor.inbox", groupId = "donor-consumer")
 	public void pledgeRequested(DonorOutbox message) {
 		LOG.info("In donor service: {}", message);
+		
 		Donor donorToSave = donorService.getRandomDonor(message.getEvent_id());
+		
 		applicationEventPublisher.publishEvent(DonorOutbox.from(donorToSave));
+		
 		donorService.save(donorToSave);
 			
 	}
@@ -34,7 +37,9 @@ public class DonorOutboxService {
 	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
 	public void acceptOutboxEvent(DonorOutbox outbox){
 		LOG.info("Donor Outbox: {}", outbox);
+		
 		donorOutboxRepository.save(outbox);
+		
 		donorOutboxRepository.delete(outbox);
 	}
 }
