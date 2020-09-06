@@ -2,7 +2,6 @@ package org.ssm.demo.donorservice.entity;
 
 import java.sql.Timestamp;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +22,6 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Person implements BaseEntity{
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-	UUID pledge_id;
 	String first_name;
 	String last_name;
 	String email;
