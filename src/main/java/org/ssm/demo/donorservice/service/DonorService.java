@@ -1,5 +1,6 @@
 package org.ssm.demo.donorservice.service;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -38,6 +39,11 @@ public class DonorService {
 					.build();
 		
 		return donor;
+	}
+	
+	@Transactional
+	public List<Donor> deleteDonorsByPledgeId(UUID pledgeId) {
+		return donorRepository.deleteByPledgeId(pledgeId);
 	}
 	
 	@Transactional

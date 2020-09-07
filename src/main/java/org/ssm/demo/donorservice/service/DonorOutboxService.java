@@ -1,5 +1,8 @@
 package org.ssm.demo.donorservice.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,23 @@ public class DonorOutboxService {
 		applicationEventPublisher.publishEvent(DonorOutbox.from(donorToSave));
 		
 		donorService.save(donorToSave);
+			
+	}
+	
+	@Transactional
+	@KafkaListener(topics = "donor.cancel.inbox", groupId = "donor-consumer")
+	public void pledgeCancelRequested(DonorOutbox message) {
+		LOG.info("In donor service for cancellation: {}", message);
+		
+		UUID pledgeId = message.getEvent_id();
+		
+		List<Donor> list = donorService.deleteDonorsByPledgeId(pledgeId);
+		
+		message.setEvent_type("PLEDGE_CANCELLED_ACK");
+		
+		applicationEventPublisher.publishEvent(message);
+		
+		LOG.info("Records deleted: {}", list.size());
 			
 	}
 
