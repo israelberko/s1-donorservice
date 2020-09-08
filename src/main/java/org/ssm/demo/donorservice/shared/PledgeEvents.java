@@ -1,0 +1,7 @@
+package org.ssm.demo.donorservice.shared;
+
+public enum PledgeEvents {
+	PLEDGE_REQUESTED, PLEDGE_MATCHED, PLEDGE_CANCELLED, PLEDGE_REQUESTED_ACK, PLEDGE_CANCELLED_ACK, 
+	PLEDGE_CANCEL_REQUESTED
+	
+}
