@@ -9,6 +9,7 @@ CREATE TABLE donor.person (
 	last_name varchar(1024) NULL,
 	email varchar(1024) NULL,
 	created_at timestamp default current_timestamp,
+	updated_at timestamp default current_timestamp,
 	CONSTRAINT invitees_pkey PRIMARY KEY (id)
 );
 
@@ -20,6 +21,7 @@ CREATE TABLE donor.donor (
 	email varchar(1024) NULL,
 	amount int default 0,
 	created_at timestamp default current_timestamp,
+	updated_at timestamp default current_timestamp,
 	CONSTRAINT donor_pkey PRIMARY KEY (id)
 );
 
