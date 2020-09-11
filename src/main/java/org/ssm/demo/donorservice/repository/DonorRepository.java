@@ -9,5 +9,5 @@ import org.ssm.demo.donorservice.entity.Donor;
 
 @Repository
 public interface DonorRepository extends PagingAndSortingRepository<Donor, Long>{
-	 List<Donor> deleteByPledge__id(UUID pledgeId);
+	 List<Donor> deleteByPledge_id(UUID pledgeId);
 }
