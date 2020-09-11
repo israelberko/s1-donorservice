@@ -13,6 +13,6 @@ import org.ssm.demo.donorservice.entity.Donor;
 @Repository
 public interface DonorRepository extends PagingAndSortingRepository<Donor, Long>{
 	 @Modifying
-	 @Query("DELETE d FROM Donor d WHERE d.pledge_id = :pledge_id")
+	 @Query("DELETE FROM Donor d WHERE d.pledge_id = :pledge_id")
 	 List<Donor> deleteByPledgeId( @Param("pledge_id")  UUID pledgeId);
 }
