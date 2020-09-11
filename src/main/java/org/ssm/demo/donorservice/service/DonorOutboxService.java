@@ -18,12 +18,12 @@ import org.ssm.demo.donorservice.repository.DonorOutboxRepository;
 
 @Service
 public class DonorOutboxService {
-	
+		
 	private static Logger LOG = LoggerFactory.getLogger(DonorOutboxService.class);
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	@Autowired DonorService donorService;
 	@Autowired DonorOutboxRepository donorOutboxRepository;
-	
+		
 	@Transactional
 	@KafkaListener(topics = "donor.inbox", groupId = "donor-consumer")
 	public void pledgeRequested(DonorOutbox message) {
@@ -36,7 +36,7 @@ public class DonorOutboxService {
 		donorService.save(donorToSave);
 			
 	}
-	
+		
 	@Transactional
 	@KafkaListener(topics = "donor.cancel.inbox", groupId = "donor-consumer")
 	public void pledgeCancelRequested(DonorOutbox message) {
@@ -63,3 +63,5 @@ public class DonorOutboxService {
 		donorOutboxRepository.delete(outbox);
 	}
 }
+
+

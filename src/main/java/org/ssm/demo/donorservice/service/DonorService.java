@@ -1,7 +1,5 @@
 package org.ssm.demo.donorservice.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -43,8 +41,9 @@ public class DonorService {
 	}
 	
 	@Transactional
-	public List<Donor> deleteDonorsByPledgeId(UUID pledgeId) {
-		return new ArrayList<>();//donorRepository.deleteByPledge__id(pledgeId);
+	public boolean deleteDonorsByPledgeId(UUID pledgeId) {
+		int deleted = donorRepository.deleteByPledgeId(pledgeId);
+		return ( deleted > 0 );
 	}
 	
 	@Transactional
