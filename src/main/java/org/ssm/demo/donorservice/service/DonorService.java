@@ -44,7 +44,7 @@ public class DonorService {
 	
 	@Transactional
 	public List<Donor> deleteDonorsByPledgeId(UUID pledgeId) {
-		return donorRepository.deleteByPledge__id(pledgeId);
+		return new ArrayList<>();//donorRepository.deleteByPledge__id(pledgeId);
 	}
 	
 	@Transactional
