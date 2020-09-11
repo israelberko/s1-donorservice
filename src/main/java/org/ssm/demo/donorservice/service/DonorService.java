@@ -41,8 +41,9 @@ public class DonorService {
 	}
 	
 	@Transactional
-	public int deleteDonorsByPledgeId(UUID pledgeId) {
-		return donorRepository.deleteByPledgeId(pledgeId);
+	public boolean deleteDonorsByPledgeId(UUID pledgeId) {
+		int deleted = donorRepository.deleteByPledgeId(pledgeId);
+		return ( deleted > 0 );
 	}
 	
 	@Transactional

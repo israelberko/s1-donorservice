@@ -1,6 +1,5 @@
 package org.ssm.demo.donorservice.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -44,9 +43,11 @@ public class DonorOutboxService {
 		
 		UUID pledgeId = message.getEvent_id();
 		
-		int deleted = donorService.deleteDonorsByPledgeId(pledgeId);
+		boolean deleted = donorService.deleteDonorsByPledgeId(pledgeId);
 		
-		message.setEvent_type("PLEDGE_CANCEL_REQUESTED_ACK");
+		message.setEvent_type(deleted ? 
+				"PLEDGE_CANCEL_REQUESTED_ACK" :
+					"PLEDGE_CANCEL_REQUESTED_NACK");
 		
 		applicationEventPublisher.publishEvent(message);
 		
