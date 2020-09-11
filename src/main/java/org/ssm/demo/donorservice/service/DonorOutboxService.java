@@ -44,13 +44,13 @@ public class DonorOutboxService {
 		
 		UUID pledgeId = message.getEvent_id();
 		
-		List<Donor> list = donorService.deleteDonorsByPledgeId(pledgeId);
+		int deleted = donorService.deleteDonorsByPledgeId(pledgeId);
 		
 		message.setEvent_type("PLEDGE_CANCELLED_ACK");
 		
 		applicationEventPublisher.publishEvent(message);
 		
-		LOG.info("Records deleted: {}", list.size());
+		LOG.info("Records deleted: {}", deleted);
 			
 	}
 

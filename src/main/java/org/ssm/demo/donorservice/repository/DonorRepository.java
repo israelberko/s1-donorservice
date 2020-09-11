@@ -1,6 +1,5 @@
 package org.ssm.demo.donorservice.repository;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,5 +13,5 @@ import org.ssm.demo.donorservice.entity.Donor;
 public interface DonorRepository extends PagingAndSortingRepository<Donor, Long>{
 	 @Modifying
 	 @Query("DELETE FROM Donor d WHERE d.pledge_id = :pledge_id")
-	 List<Donor> deleteByPledgeId( @Param("pledge_id")  UUID pledgeId);
+	 int deleteByPledgeId( @Param("pledge_id")  UUID pledgeId);
 }
