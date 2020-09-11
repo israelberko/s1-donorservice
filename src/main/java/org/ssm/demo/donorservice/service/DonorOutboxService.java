@@ -1,6 +1,5 @@
 package org.ssm.demo.donorservice.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -18,12 +17,12 @@ import org.ssm.demo.donorservice.repository.DonorOutboxRepository;
 
 @Service
 public class DonorOutboxService {
-		
+	
 	private static Logger LOG = LoggerFactory.getLogger(DonorOutboxService.class);
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	@Autowired DonorService donorService;
 	@Autowired DonorOutboxRepository donorOutboxRepository;
-		
+	
 	@Transactional
 	@KafkaListener(topics = "donor.inbox", groupId = "donor-consumer")
 	public void pledgeRequested(DonorOutbox message) {
@@ -36,7 +35,7 @@ public class DonorOutboxService {
 		donorService.save(donorToSave);
 			
 	}
-		
+	
 	@Transactional
 	@KafkaListener(topics = "donor.cancel.inbox", groupId = "donor-consumer")
 	public void pledgeCancelRequested(DonorOutbox message) {
@@ -44,13 +43,15 @@ public class DonorOutboxService {
 		
 		UUID pledgeId = message.getEvent_id();
 		
-		List<Donor> list = donorService.deleteDonorsByPledgeId(pledgeId);
+		boolean deleted = donorService.deleteDonorsByPledgeId(pledgeId);
 		
-		message.setEvent_type("PLEDGE_CANCELLED_ACK");
+		message.setEvent_type(deleted ? 
+				"PLEDGE_CANCEL_REQUESTED_ACK" :
+					"PLEDGE_CANCEL_REQUESTED_NACK");
 		
 		applicationEventPublisher.publishEvent(message);
 		
-		LOG.info("Records deleted: {}", list.size());
+		LOG.info("Records deleted: {}", deleted);
 			
 	}
 
@@ -63,5 +64,3 @@ public class DonorOutboxService {
 		donorOutboxRepository.delete(outbox);
 	}
 }
-
-
