@@ -46,7 +46,7 @@ public class DonorOutboxService {
 		
 		int deleted = donorService.deleteDonorsByPledgeId(pledgeId);
 		
-		message.setEvent_type("PLEDGE_CANCELLED_ACK");
+		message.setEvent_type("PLEDGE_CANCEL_REQUESTED_ACK");
 		
 		applicationEventPublisher.publishEvent(message);
 		
