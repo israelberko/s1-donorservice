@@ -38,7 +38,7 @@ public class DonorOutboxService {
 //			
 //	}
 	
-	@Transactional
+//	@Transactional
 	@Bean
 	public Consumer<DonorOutbox> pledgeRequested() {
 		return message -> {
@@ -71,7 +71,7 @@ public class DonorOutboxService {
 //			
 //	}
 	
-	@Transactional
+//	@Transactional
 	@Bean
 	public Consumer<DonorOutbox> pledgeCancelRequested() {
 		return message -> {
