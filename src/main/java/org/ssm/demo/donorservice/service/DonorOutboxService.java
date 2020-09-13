@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,7 @@ public class DonorOutboxService {
 //	}
 	
 	@Transactional
+	@Bean
 	public Consumer<DonorOutbox> pledgeRequested() {
 		return message -> {
 			LOG.info("In donor service: {}", message);
@@ -70,6 +72,7 @@ public class DonorOutboxService {
 //	}
 	
 	@Transactional
+	@Bean
 	public Consumer<DonorOutbox> pledgeCancelRequested() {
 		return message -> {
 			LOG.info("In donor service for cancellation: {}", message);
